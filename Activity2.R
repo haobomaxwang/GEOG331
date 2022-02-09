@@ -35,3 +35,71 @@ datW <- read.csv("Z:\\students\\hwang\\DATA\\noaa_weather\\2011124.csv",
 
 #see the structure of the dataset
 str(datW)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#reformatting the date 
+datW$dateF <-as.Date(datW$DATE, "%Y-%m-%d")
+
+#saving the year to a separate column 
+datW$year <-as.numeric(format(datW$dateF, "%Y"))
+
+
+
+#find out all unique site names
+unique(datW$NAME)
+
+
+#look at the mean maximum temperature for Aberdeen
+mean(datW$TMAX[datW$NAME== "ABERDEEN, WA US"], na.rm = TRUE)
+
+# calculate the average temperature for all enteries 
+
+datW$TAVE <- (datW$TMIN + datW$TMAX)/2
+
+#get the mean across all sites
+#the by function is a list of one or more variables to index over.
+#FUN indicates the function we want to use
+#if you want to specify any function specific arguments use a comma and add them after the function
+#here we want to use the na.rm arguments specific to 
+
+averageTemp <- aggregate(datW$TAVE, by=list(datW$NAME), FUN="mean", na.rm= "TRUE")
+
+#change the automatic output of column names to be more meaningful
+#note that MAAT is a common abbreviation for 
+#Mean Annual Air Temperature
+
+colnames(averageTemp) <- c("Name", "MAAT")
+
+
+#convert site name to numbers 
+#convert level to number for factor data type
+#you will have to reference the level output or look at the row of data to see the character designation.
+datW$siteN <- as.numeric(datW$NAME)
+
+
+#make a histogram for the first site in our levels
+hist(datW$TAVE[datW$siteN=="1"], freq = FALSE, 
+     main = paste(levels(datW$NAME)[1]), xlab = "Average daily temperature",
+     ylab = "Relative frequency", col="grey50",
+     border="white")
+
