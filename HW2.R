@@ -54,6 +54,40 @@ sampleintegers_prime <- as.integer(c(2,3,5,7,11))
 samplecharacter<- c("My", "name", "is", "bla", "bla...")
 
 
+
+
+
+
+
+
+
+#reformatting the date 
+datW$dateF <-as.Date(datW$DATE, "%Y-%m-%d")
+
+#saving the year to a separate column 
+datW$year <-as.numeric(format(datW$dateF, "%Y"))
+
+
+
+#find out all unique site names
+unique(datW$NAME)
+
+
+#look at the mean maximum temperature for Aberdeen
+mean(datW$TMAX[datW$NAME== "ABERDEEN, WA US"], na.rm = TRUE)
+
+# calculate the average temperature for all enteries 
+
+datW$TAVE <- (datW$TMIN + datW$TMAX)/2
+
+#convert site name to numbers 
+#convert level to number for factor data type
+#you will have to reference the level output or look at the row of data to see the character designation.
+datW$siteN <- as.numeric(datW$NAME)
+
+
+
+
 #qustion 3: 
 
 hist(datW$TAVE[datW$siteN=="1"], freq = FALSE, 
@@ -281,11 +315,21 @@ points(x.plot5,
 
 
 
+#question 6 
+
+qnorm(0.95,
+      mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE)+4,
+      sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
+
+# answer is 22.51 meaning that the 0.95 level is now 22.51 degree
 
 
+## calculating the pnorm for old threshold 
+1-pnorm(18.51026, mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE)+4,
+        sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
 
-
-
-
+# answer is 0.203
+# meaning that there will be 20% chance that the average temperature of a given day will be greater 
+# than the previous threshold. 
 
 
