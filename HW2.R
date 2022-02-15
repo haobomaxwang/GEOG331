@@ -333,3 +333,80 @@ qnorm(0.95,
 # than the previous threshold. 
 
 
+
+
+
+# question 7 precipitation of alberdeen 
+precalb<- hist(datW$PRCP[datW$siteN==1], na.rm=TRUE, freq=FALSE, col = "grey50", 
+               main = paste(levels(datW$siteN==1)), xlab = "Precipitation", ylab = "Relative Frequency")
+
+
+# the shape is best described by exponential distribution which is a special case under gamma distribution
+
+
+
+
+
+## question 8 
+# calculate the annual precipitation for alberdeen 
+
+alberdeen<- datW[datW$siteN==1, ]
+
+annualprec_alber<- aggregate(alberdeen$PRCP, by=list(alberdeen$year),FUN="sum",na.rm=TRUE)
+
+colnames(annualprec_alber) <- c("Year","Annual Precipitation")
+
+precalber_hist <- hist(annualprec_alber$`Annual Precipitation`, freq = FALSE, main = "Annual Precipitation for Alberdeen", 
+     xlab = "Precipitation in mm", 
+     ylab = "Relative Frequency", col = "grey50")
+
+## this looks like it's normally distributed
+x.precalber <- seq(1000,3000, length.out= 100)
+y.precalber <- dnorm(seq(1000,3000, length.out=100), 
+                     mean(annualprec_alber$`Annual Precipitation`, na.rm = TRUE),
+                     sd(annualprec_alber$`Annual Precipitation`, na.rm = TRUE))
+y.precalber_scaled <- (max(precalber_hist$density)/max(y.precalber))* y.precalber
+
+points(x.precalber,
+       y.precalber_scaled, 
+       type = "l", 
+       col = "royalblue3",
+       lwd = 4, 
+       lty = 2)
+
+
+
+##question 9
+
+range(datW$year)
+# the answer is 1930 to 2019
+# to calculate the mean annual precipitation of a certain site, we can add up all the precipitation data 
+# of that site and divide the sum by 90 years
+
+
+sum_prec <- aggregate(datW$PRCP, by=list(datW$NAME), FUN="sum", na.rm= "TRUE")
+annual_prec <- sum_prec/90
+
+# FOR ALBERDEEN: 2107.077 mm 
+
+# for livermore: 358.3578 mm
+
+# for Mandan :415.7189 mm
+
+# for Mormon :312.6600 mm
+
+# for morrisville: 946.2300 mm
+
+
+## to calculate the temperature for each site
+averageTemp <- aggregate(datW$TAVE, by=list(datW$NAME), FUN="mean", na.rm= "TRUE")
+
+# ALBERDEEN: 10.432268 deg C. This site has a cold and wet climate.  
+
+#LIVERMORE, CA US: 15.381992 deg C. This site has a temporate and dry climate. 
+
+#MANDAN EXPERIMENT STATION, ND US: 5.568997 deg C. This site has a cold and dry climate. 
+
+#MORMON FLAT, AZ US: 22.019010 deg C. This site has a warm and dry climate. 
+
+#MORRISVILLE  SW, NY US: 6.655229 deg C. This site has a cold and moist climate. 
