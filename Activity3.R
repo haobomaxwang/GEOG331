@@ -32,3 +32,22 @@ datW <- read.csv("Z:/students/hwang/DATA/bewkes/bewkes_weather.csv",
 
 #preview data
 print(datW[1,])
+
+
+#get sensor info from file
+# this data table will contain all relevant units
+# only read in the first two rows 
+
+sensorInfo <- read.csv("Z:/students/hwang/DATA/bewkes/bewkes_weather.csv",
+                         na.strings=c("#N/A"), nrows=2)
+
+print(sensorInfo)
+
+#now that the column names for sensorInfo data is good
+# let's use it on the main data
+
+#get column names from sensorInfo table
+# and set weather station colnames  to be the same
+colnames(datW) <-   colnames(sensorInfo)
+#preview data
+print(datW[1,])
