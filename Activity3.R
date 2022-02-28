@@ -51,3 +51,72 @@ print(sensorInfo)
 colnames(datW) <-   colnames(sensorInfo)
 #preview data
 print(datW[1,])
+
+
+
+
+
+
+
+
+
+###### to clean up the date format
+#use install.packages to install lubridate
+#    install.packages(c("lubridate"))
+# only need to download once for each computer 
+
+
+# load the package to the working environment
+# library(lubridate)
+
+#convert to standardized format
+#date format is m/d/y
+dates <- mdy_hm(datW$timestamp, tz= "America/New_York")
+
+#calculate day of year
+datW$doy <- yday(dates)
+#calculate hour in the day
+datW$hour <- hour(dates) + (minute(dates)/60)
+#calculate decimal day of year
+datW$DD <- datW$doy + (datW$hour/24)
+#quick preview of new date calculations
+datW[1,]
+
+
+
+
+
+
+
+
+# checking missing data
+####
+# The is.na function is meant to return a TRUE/FALSE answer
+# where TRUE indicates a NA is present. 
+# The which function indicates all elements in the vector 
+# where the items in the function return a TRUE value. 
+# If you remember from last class length returns the 
+# length of the vector. 
+
+#see how many values have missing data for each sensor observation
+#air temperature
+length(which(is.na(datW$air.temperature)))
+# the answer is 0
+
+#wind speed
+length(which(is.na(datW$wind.speed)))
+# 0
+
+#precipitation
+length(which(is.na(datW$precipitation)))
+# 0
+# so these three are all good
+
+
+#soil temperature
+length(which(is.na(datW$soil.moisture)))
+#soil moisture
+length(which(is.na(datW$soil.temp)))
+
+## the two soil measurement both have 707 NA
+
