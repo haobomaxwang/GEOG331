@@ -120,3 +120,51 @@ length(which(is.na(datW$soil.temp)))
 
 ## the two soil measurement both have 707 NA
 
+#make a plot with filled in points (using pch)
+#line lines
+plot(datW$DD, datW$soil.moisture, pch=10, 
+     type="b", xlab = "Day of Year",
+     ylab="Soil moisture (cm3 water per cm3 soil)")
+
+# we'll see that the data for the second half of the year 
+# is missing 
+
+
+
+# lets plot something for air temperature
+#make a plot with filled in points (using pch)
+#line lines
+plot(datW$DD, datW$air.temperature, pch=19, type="b", xlab = "Day of Year",
+     ylab="Air temperature (degrees C)")
+# the plot looks good 
+# we know that the summer temperature data should not
+# contain any value below 0
+
+# using ifelse to change anything below 0 to NA
+datW$air.tempQ1 <- ifelse(datW$air.temperature < 0, NA, 
+                          datW$air.temperature)
+
+
+
+
+
+#check the values at the extreme range of the data
+#and throughout the percentiles
+quantile(datW$air.tempQ1)
+
+# we got 
+# 0%  25%  50%  75% 100% 
+# 7.0 16.2 20.1 23.3 34.4 
+
+
+#look at days with really low air temperature
+datW[datW$air.tempQ1 < 8,]  
+length(datW[datW$air.tempQ1<8,])
+# there are 17 enteries where air temp is below 8
+
+#look at days with really high air temperature
+datW[datW$air.tempQ1 > 33,]  
+length(datW[datW$air.tempQ1 > 33,]  )
+
+# there are also 17 enteries where air temp is above 33
+
