@@ -168,3 +168,5 @@ length(datW[datW$air.tempQ1 > 33,]  )
 
 # there are also 17 enteries where air temp is above 33
 
+
+
