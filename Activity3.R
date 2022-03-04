@@ -314,3 +314,24 @@ DD air.tempQ1 wind.speedQ1 air.tempQ2
 # for total precipitation: 
 sum(datW$precipitation)
 # we get 177.828 mm
+
+
+#question 9:
+par(mfrow=c(2,2))
+# soil moisture plot 
+plot(datW$DD, datW$soil.moisture, cex=1, pch=19, type="b", xlab = "Day of Year",
+     ylab="soil moisture m^3/m^3")
+
+# air temperature
+plot(datW$DD, datW$air.tempQ2, cex=1, pch=19, type="b", xlab = "Day of Year",
+     ylab="air temperature C")
+
+# soil temperature 
+plot(datW$DD, datW$soil.temp, cex=1, pch=19, type="b", xlab = "Day of Year",
+     ylab="soil temperature C")
+
+# precipitation 
+plot(datW$DD, datW$precipitation, cex=1, pch=19, type="b", xlab = "Day of Year",
+     ylab="precipitation mm")
+
+
