@@ -159,14 +159,66 @@ quantile(datW$air.tempQ1)
 
 #look at days with really low air temperature
 datW[datW$air.tempQ1 < 8,]  
-length(datW[datW$air.tempQ1<8,])
-# there are 17 enteries where air temp is below 8
+length(which(datW$air.tempQ1<8))
+# there are 6 enteries where air temp is below 8
 
 #look at days with really high air temperature
 datW[datW$air.tempQ1 > 33,]  
-length(datW[datW$air.tempQ1 > 33,]  )
+length(which(datW$air.tempQ1 > 33))
 
-# there are also 17 enteries where air temp is above 33
+# there are 8 enteries where air temp is above 33
 
 
 
+
+#normalize lightning with precipitation
+lightscale <- (max(datW$precipitation)/max(datW$lightning.acvitivy)) * datW$lightning.acvitivy
+
+# plot preticipation 
+plot(datW$DD, datW$precipitation,
+     xlab = "Day of Year", 
+     ylab = "Precipitation & lightning",
+     type="n")
+
+
+# only plot when there are precipitation 
+points(datW$DD[datW$precipitation > 0], datW$precipitation[datW$precipitation > 0],
+       col= rgb(95/255,158/255,160/255,.5), pch=15)    
+
+#plot lightning points only when there is lightning     
+points(datW$DD[lightscale > 0], lightscale[lightscale > 0],
+       col= "tomato3", pch=19)
+
+
+assert(length(datW$precipitation) == length(lightscale),
+       "error: unequal length")
+assert(length(datW$DD)== length(lightscale), 
+       "error: unequal length")
+
+#filter out storms in wind and air temperature measurements
+# filter all values with lightning that coincides with rainfall greater than 2mm or only rainfall over 5 mm.    
+#create a new air temp column
+datW$air.tempQ2 <- ifelse(datW$precipitation  >= 2 
+                          & datW$lightning.acvitivy >0, NA,
+                          ifelse(datW$precipitation > 5, NA, 
+                                 datW$air.tempQ1))
+
+# remove the same entries from wind speed 
+datW$wind.speedQ1 <- ifelse(datW$precipitation  >= 2 
+                            & datW$lightning.acvitivy >0, NA,
+                          ifelse(datW$precipitation > 5, NA, 
+                                 datW$wind.speed))
+
+# to see whether we've removed the same number of rows
+# use the assert function on the length of NA values
+# from the air.tempQ2 and wind.speedQ1
+
+assert(length(which(is.na(datW$air.tempQ2)))==length(which(is.na(datW$wind.speedQ1)))
+       , "error: unequal length")
+
+## no error massage showed up, which means we're good
+
+
+
+plot(datW$DD, datW$wind.speedQ1, pch=19, type="b", xlab = "Day of Year",
+     ylab="wind speed m/s")
