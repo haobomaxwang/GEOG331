@@ -20,40 +20,56 @@ library(ggplot2)
 # hint: consider using a list, and also new vectors 
 # for regression variables
 
-
-# to print the answers
-
-for(i in c(1,3)){
-   print(iris[ , i][iris$Species=="versicolor"]
-           *iris[ , i+1][iris$Species=="versicolor"])
-}
-
-# this is for sepal length * sepal width and petal length * petal width
-# because the columns used in each calculation are next to each 
-# other, we can use i and i+1 while i has the value 1 or 3.
+# we see that sepal length and sepal width are the 1st 
+# and 2nd column in datasheet iris. And petal length and
+# petal width the 3rd and 4th column
 
 
+# create a list to store the linear models
+sepal_lw_petal_lw<- list()
 
-for(i in c(1)){
-  print(iris[ , i][iris$Species=="versicolor"]
-        *iris[ , i+2][iris$Species=="versicolor"])
-}
-
-# this is to calculate sepel length * petal length 
-# we use i and i +2, and i has a pre-determined number 1
-# because sepel length is the first column
-
-
-
-# to save the answer??????
-
-
+# lm function works as lm(y, x)
+# so i+1 is the column rightside to i and thus is the y variable
+# we only need i to be the 1st and 3rd column 
+# thus, we specify that i is from c(1,3)
 
 for(i in c(1,3)){
-  list=(iris[ , i][iris$Species=="versicolor"]
-        *iris[ , i+1][iris$Species=="versicolor"])
+  linear_models<- lm(iris[,i+1][iris$Species=="versicolor"]~
+       iris[,i][iris$Species=="versicolor"])
+  #store the summary of linear_models to the list
+  sepal_lw_petal_lw[[i]]<- summary(linear_models)
 }
-# the problem is the list world only record the last calculation
+
+# clicking open the sepal_lw_petal_lw list 
+# we can see that sepal length vs wide has an
+# intercept of 0.87215 and correlation coefficient of 0.31972
+
+# petal length vs wide has an interception of -0.08429 and
+# correlation coefficient of 0.33105
+
+
+
+# then let's look at sepal length and petal length 
+# they are located on the 1st and 3rd column
+
+# create a list for sepal length vs petal length 
+sepal_length_petal_length<- list()
+
+# because sepal length is the 1st column, i=1 refers to
+# that column, and i+2 refers to the 3rd column which 
+# is petal length
+
+for (i in c(1)){
+  linear_models2<- lm(iris[,i+2][iris$Species=="versicolor"]~
+                       iris[,i][iris$Species=="versicolor"])
+  
+  sepal_length_petal_length[[i]]<- summary(linear_models2)
+}
+  
+# we see sepal legnth and petal length has an intercept of
+# 0.18512 and a correlation coefficient of 0.68647
+
+
 
 
 
@@ -68,7 +84,9 @@ height <- data.frame(Species = c("virginica","setosa","versicolor"),
                      Height.cm = c(60,100,11.8))
 
 
-# new iris 
+# create a new iris datasheet called iris1 
+# and join this with height
+
 iris1<-left_join(iris, height, 
                     )
 # Joining, by = "Species"
