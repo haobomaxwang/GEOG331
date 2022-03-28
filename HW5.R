@@ -70,3 +70,65 @@ datP$decYear <- ifelse(leap_year(datP$year),datP$year + (datP$decDay/366),
 #plot discharge by decimal year
 plot(datD$decyear, datD$discharge, type="l", xlab="Year", 
          ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
+
+
+
+
+###### to plot the daily average discharge vs day of year
+aveF<- aggregate(datD$discharge, by=list(datD$doy), FUN="mean")
+
+# rename the colomn name to doy and discharge
+colnames(aveF)<- c("doy", "dailyAve")
+
+# standard deviation
+sdF <- aggregate(datD$discharge, by=list(datD$doy), FUN="sd")
+colnames(sdF)<- c("doy","dailySD")
+
+#You can improve the plot by using a few 
+# plotting arguments. 
+#The dev.new function will start a new plot window 
+# with a standard size.
+
+#start new plot
+dev.new(width=8,height=8)
+
+
+### reset the y limit to include the standard deviation 
+### and use polygon to show the standard deviation
+#bigger margins
+par(mai=c(1,1,1,1))
+#make plot
+plot(aveF$doy,aveF$dailyAve, 
+     type="l", 
+     xlab="DOY", 
+     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
+     lwd=2,
+     ylim=c(0,90),
+     xaxs="i", yaxs ="i",#remove gaps from axes
+     axes=FALSE)# dont show axis, save it for later
+#show standard deviation around the mean
+polygon(c(aveF$doy, rev(aveF$doy)),#x coordinates
+        c(aveF$dailyAve-sdF$dailySD,rev(aveF$dailyAve+sdF$dailySD)),#ycoord
+        col=rgb(0.392, 0.584, 0.929,.2), #color that is semi-transparent
+        border=NA#no border
+)
+### readjust the axis
+axis(1, seq(0,360, by=40), #tick intervals
+     lab=seq(0,360, by=40)) #tick labels
+axis(2, seq(0,80, by=20),
+     seq(0,80, by=20),
+     las = 2)#show ticks at 90 degree angle
+### legend
+legend("topright", c("mean","1 standard deviation"), #legend items
+       lwd=c(2,NA),#lines
+       fill=c(NA,rgb(0.392, 0.584, 0.929,.2)),#fill boxes
+       border=NA,#no border for both fill boxes (don't need a vector here since both are the same)
+       bty="n")#no legend border
+
+### or you can use this legend notation
+
+legend("topright", c("mean","1 standard deviation"), #legend items
+       lwd=c(2,NA),#lines
+       col=c("black",rgb(0.392, 0.584, 0.929,.2)),#colors
+       pch=c(NA,15),#symbols
+       bty="n")#no legend border
