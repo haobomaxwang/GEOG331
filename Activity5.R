@@ -48,7 +48,7 @@ datD$decday <- datD$doy + datD$hour/24
 
 datD$decyear <- ifelse(leap_year(datD$year), datD$year + 
                          datD$decday/366, datD$year +
-                          datD$decday/365)
+                         datD$decday/365)
 
 # then repeat the whole procedure for precipitation data
 
@@ -69,7 +69,7 @@ datP$decYear <- ifelse(leap_year(datP$year),datP$year + (datP$decDay/366),
 
 #plot discharge by decimal year
 plot(datD$decyear, datD$discharge, type="l", xlab="Year", 
-         ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
+     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
 
 
 
@@ -127,12 +127,131 @@ legend("topright", c("mean","1 standard deviation"), #legend items
 
 ### or you can use this legend notation
 
-legend("topright", c("mean","1 standard deviation"), #legend items
-       lwd=c(2,NA),#lines
-       col=c("black",rgb(0.392, 0.584, 0.929,.2)),#colors
-       pch=c(NA,15),#symbols
+legend("topright", c("mean","2017", "1 standard deviation"), #legend items
+       lwd=c(2,2,NA),#lines
+       col=c("black","red", rgb(0.392, 0.584, 0.929,.2)),#colors
+       pch=c(NA,NA,15),#symbols
+       bty="n")#no legend border
+  
+
+### make the line for 2017
+lines(datD$doy[datD$year=="2017"], 
+     datD$discharge[datD$year=="2017"], type = "l",
+     lty=1, col="red")
+### to get the range of the 2017 discharge
+
+disc2017<- datD$discharge[datD$year=="2017"]
+range(disc2017)
+## 1.22 160.00
+## thus the upper limit of the y axis should be 
+## at least 160
+
+
+
+
+
+
+
+### remake the plot
+
+par(mai=c(1,1,1,1))
+#make plot
+plot(aveF$doy,aveF$dailyAve, 
+     type="l", 
+     xlab="month", main = "Time of the year vs Discharge",
+     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
+     lwd=2,
+     ylim=c(0,180),
+     xaxs="i", yaxs ="i",#remove gaps from axes
+     axes=FALSE)# dont show axis, save it for later
+#show standard deviation around the mean
+polygon(c(aveF$doy, rev(aveF$doy)),#x coordinates
+        c(aveF$dailyAve-sdF$dailySD,rev(aveF$dailyAve+sdF$dailySD)),#ycoord
+        col=rgb(0.392, 0.584, 0.929,.2), #color that is semi-transparent
+        border=NA#no border
+)
+### readjust the axis
+axis(1, seq(0,360, by=31), #tick intervals
+     labels=c(1:12)) #tick labels
+axis(2, seq(0,180, by=30),
+     seq(0,180, by=30),
+     las = 2)#show ticks at
+
+legend("topright", c("mean","2017", "1 standard deviation"), #legend items
+       lwd=c(1,1,NA),#lines
+       col=c("black","red", rgb(0.392, 0.584, 0.929,.2)),#colors
+       pch=c(NA,NA,15),#symbols
        bty="n")#no legend border
 
 
+### make the line for 2017
+lines(datD$doy[datD$year=="2017"], 
+      datD$discharge[datD$year=="2017"], type = "l",
+      lty=1, col="red", lwd=1)
+### to get the range of the 2017 discharge
 
-###
+disc2017<- datD$discharge[datD$year=="2017"]
+range(disc2017)
+## 1.22 160.00
+## thus the upper limit of the y axis should be 
+## at least 160
+
+
+### to know which day has consecutive 
+## 24 h measurement 
+
+rainydays<- c()
+
+for (i in 1:length(datP$doy)) {
+ if (){
+   rainydays <- datD[, datD$doy]
+ }  
+}
+
+
+
+
+
+
+
+
+#### 2007 1 10
+#subsest discharge and precipitation within range of interest
+hydroD <- datD[datD$doy >= 338 & datD$doy < 339 & datD$year == 2007,]
+hydroP <- datP[datP$doy >= 338 & datP$doy < 339 & datP$year == 2007,]
+
+
+min(hydroD$discharge)
+
+#get minimum and maximum range of discharge to plot
+#go outside of the range so that it's easy to see high/low values
+#floor rounds down the integer
+yl <- floor(min(hydroD$discharge))-1
+#ceiling rounds up to the integer
+yh <- ceiling(max(hydroD$discharge))+1
+#minimum and maximum range of precipitation to plot
+pl <- 0
+pm <-  ceiling(max(hydroP$HPCP))+.5
+#scale precipitation to fit on the 
+hydroP$pscale <- (((yh-yl)/(pm-pl)) * hydroP$HPCP) + yl
+
+par(mai=c(1,1,1,1))
+#make plot of discharge
+plot(hydroD$decday,
+     hydroD$discharge, 
+     type="l", 
+     ylim=c(yl,yh), 
+     lwd=2,
+     xlab="Day of year", 
+     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
+#add bars to indicate precipitation 
+for(i in 1:nrow(hydroP)){
+  polygon(c(hydroP$decDay[i]-0.017,hydroP$decDay[i]-0.017,
+            hydroP$decDay[i]+0.017,hydroP$decDay[i]+0.017),
+          c(yl,hydroP$pscale[i],hydroP$pscale[i],yl),
+          col=rgb(0.392, 0.584, 0.929,.2), border=NA)
+}
+
+
+
+### 
