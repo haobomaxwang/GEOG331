@@ -202,14 +202,14 @@ range(disc2017)
 ### to know which day has consecutive 
 ## 24 h measurement 
 
-rainydays2007<- data.frame()
+#rainydays2007<- data.frame()
 
-for (i in 1:366) {
-  d<- datP[datP$doy==i,] #[datP$year=="2007"]
- if (nrow(d)==24){
-   rainydays2007=rbind(rainydays,d)
- }  
-}
+#for (i in 1:366) {
+#  d<- datP[datP$doy==i,] #[datP$year=="2007"]
+# if (nrow(d)==24){
+#   rainydays2007=rbind(rainydays,d)
+# }  
+#}
 
 ###############
 rainyday <- data.frame()
