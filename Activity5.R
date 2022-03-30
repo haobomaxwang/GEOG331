@@ -119,18 +119,18 @@ axis(2, seq(0,80, by=20),
      seq(0,80, by=20),
      las = 2)#show ticks at 90 degree angle
 ### legend
-legend("topright", c("mean","1 standard deviation"), #legend items
-       lwd=c(2,NA),#lines
-       fill=c(NA,rgb(0.392, 0.584, 0.929,.2)),#fill boxes
-       border=NA,#no border for both fill boxes (don't need a vector here since both are the same)
-       bty="n")#no legend border
+#legend("topright", c("mean","1 standard deviation"), #legend items
+#       lwd=c(2,NA),#lines
+#       fill=c(NA,rgb(0.392, 0.584, 0.929,.2)),#fill boxes
+#       border=NA,#no border for both fill boxes (don't need a vector here since both are the same)
+#       bty="n")#no legend border
 
 ### or you can use this legend notation
 
-legend("topright", c("mean","2017", "1 standard deviation"), #legend items
-       lwd=c(2,2,NA),#lines
-       col=c("black","red", rgb(0.392, 0.584, 0.929,.2)),#colors
-       pch=c(NA,NA,15),#symbols
+legend("topright", c("mean", "1 standard deviation"), #legend items
+       lwd=c(2,NA),#lines
+       col=c("black", rgb(0.392, 0.584, 0.929,.2)),#colors
+       pch=c(NA,15),#symbols
        bty="n")#no legend border
   
 
@@ -197,15 +197,27 @@ range(disc2017)
 ## at least 160
 
 
+
+
 ### to know which day has consecutive 
 ## 24 h measurement 
 
-rainydays<- c()
+rainydays2007<- data.frame()
 
-for (i in 1:length(datP$doy)) {
- if (){
-   rainydays <- datD[, datD$doy]
+for (i in 1:366) {
+  d<- datP[datP$doy==i,] #[datP$year=="2007"]
+ if (nrow(d)==24){
+   rainydays2007=rbind(rainydays,d)
  }  
+}
+
+###############
+rainyday <- data.frame()
+
+for (i in 1:nrow(datP)) {
+  if (datP[i,5]== datP[i+23,5])
+  {d<- (datP[i, ])
+  rainyday=rbind(rainyday,d)} 
 }
 
 
@@ -213,12 +225,10 @@ for (i in 1:length(datP$doy)) {
 
 
 
-
-
-#### 2007 1 10
+#### 2007 296 day
 #subsest discharge and precipitation within range of interest
-hydroD <- datD[datD$doy >= 338 & datD$doy < 339 & datD$year == 2007,]
-hydroP <- datP[datP$doy >= 338 & datP$doy < 339 & datP$year == 2007,]
+hydroD <- datD[datD$doy >= 296 & datD$doy < 297 & datD$year == 2007,]
+hydroP <- datP[datP$doy >= 296 & datP$doy < 297 & datP$year == 2007,]
 
 
 min(hydroD$discharge)
@@ -254,4 +264,14 @@ for(i in 1:nrow(hydroP)){
 
 
 
-### 
+### box plot and violin plot
+library(ggplot2)
+#specify year as a factor
+datD$yearPlot <- as.factor(datD$year)
+#make a boxplot
+ggplot(data= datD, aes(yearPlot,discharge)) + 
+  geom_boxplot()
+
+#make a violin plot
+ggplot(data= datD, aes(yearPlot,discharge)) + 
+  geom_violin()
