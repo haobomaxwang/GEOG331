@@ -355,4 +355,3 @@ plot2017<- ggplot(data= discharge2017, aes(season,discharge)) +
   geom_violin()
 
 plot2017 + ggtitle("Discharge in 2017 by season")
-
