@@ -1,10 +1,10 @@
 
 # read in csv
-PM2.5_2017<- read.csv("Z:/students/hwang/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2017.csv")
-PM2.5_2018<- read.csv("Z:/students/hwang/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2018.csv")
-PM2.5_2019<- read.csv("Z:/students/hwang/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2019.csv")
-PM2.5_2020<- read.csv("Z:/students/hwang/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2020.csv")
-PM2.5_2021<- read.csv("Z:/students/hwang/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2021.csv")
+PM2.5_2017<- read.csv("Z:/students/hwang/github/GEOG331/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2017.csv")
+PM2.5_2018<- read.csv("Z:/students/hwang/github/GEOG331/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2018.csv")
+PM2.5_2019<- read.csv("Z:/students/hwang/github/GEOG331/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2019.csv")
+PM2.5_2020<- read.csv("Z:/students/hwang/github/GEOG331/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2020.csv")
+PM2.5_2021<- read.csv("Z:/students/hwang/github/GEOG331/research project/data/ad_viz_plotval_data_PM_2.5_NYC_2021.csv")
 
 ## each entry has multiple measurements on each day 
 ## from different sites. We want to calculate the mean
@@ -64,6 +64,7 @@ date2021<- as.Date(PM2.5_2021dailyave$date, "%m/%d/%Y")
 PM2.5_2021dailyave$doy<- yday(date2021)
 
 ## plot the graph for 2017 first 
+par(mai=c(1,1,1,1))
 
 plot(PM2.5_2017dailyave$doy, PM2.5_2017dailyave$avePM2.5,
      main = "Date vs mean pm2.5", 
@@ -71,9 +72,25 @@ plot(PM2.5_2017dailyave$doy, PM2.5_2017dailyave$avePM2.5,
      ylab = "PM2.5 µg/m³",
      type= "l", lty= 3, 
      col= "magenta4",
-    ylim= c(0,55)
+    ylim= c(0,40)
      )
 
+lines(PM2.5_2018dailyave$doy, 
+      PM2.5_2018dailyave$avePM2.5, type = "l",
+      lty=4, col="red")
+lines(PM2.5_2019dailyave$doy, 
+      PM2.5_2019dailyave$avePM2.5, type = "l",
+      lty=2, col="blue")
+lines(PM2.5_2020dailyave$doy, 
+      PM2.5_2020dailyave$avePM2.5, type = "l",
+      lty=1, col="green", lwd=2)
+
+legend("topright", c("2017","2018", "2019", "2020"), #legend items
+       lty=c(3,4,2,1), #line types
+       lwd=c(1,1,1,2),#lines width
+       col=c("magenta4","red", "blue", "green"), #colors
+       pch=c(NA,NA,NA,NA),#symbols
+       bty="n")#no legend border
 
 ## Most studies indicate PM2.5 at or below 12 μg/m3 is 
 # considered healthy with little to no risk from 
