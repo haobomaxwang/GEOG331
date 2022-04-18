@@ -64,6 +64,7 @@ date2021<- as.Date(PM2.5_2021dailyave$date, "%m/%d/%Y")
 PM2.5_2021dailyave$doy<- yday(date2021)
 
 ## plot the graph for 2017 first 
+dev.new(width=8, height=8)
 par(mai=c(1,1,1,1))
 
 plot(PM2.5_2017dailyave$doy, PM2.5_2017dailyave$avePM2.5,
