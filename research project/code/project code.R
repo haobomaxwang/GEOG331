@@ -119,8 +119,78 @@ avePM2.5<- merge(avePM2.5,
                  by="doy")
 # now we have a dataframe that has 2017,
 # 2018, 2019, 2021 data
+# change column names
 colnames(avePM2.5)<- c("doy", "date2017",
                        "ave2017", "date2018",
                        "ave2018", "date2019",
                        "ave2019", "date2021", 
                        "ave2021")
+
+## calculate the average
+avePM2.5$ave4years <- (avePM2.5$ave2017+
+                         avePM2.5$ave2018+
+                         avePM2.5$ave2019+
+                         avePM2.5$ave2021)/4
+
+## plot the average and then 2020
+dev.new(width=8, height=8)
+par(mai=c(1,1,1,1))
+
+plot(avePM2.5$doy, avePM2.5$ave4years,
+     main = "Date vs mean pm2.5", 
+     xlab = "Date as day of year", 
+     ylab = "PM2.5 µg/m³",
+     type= "l", lty= 3, 
+     col= "blue",
+     ylim= c(0,40)
+)
+
+lines(PM2.5_2020dailyave$doy, 
+      PM2.5_2020dailyave$avePM2.5, type = "l",
+      lty=1, col="green")
+
+legend("topright", c("Four-year average", "2020"), #legend items
+       lty=c(3,1), #line types
+       lwd=c(1,1),#lines width
+       col=c("blue", "green"), #colors
+       pch=c(NA,NA),#symbols
+       bty="n")#no legend border
+
+abline(h=12, col="yellow")
+abline(h=35, col="red")
+
+## interesting, it seems like most days in
+# 2020 have lower PM 2.5 values than 4 year 
+# average 
+
+
+pm2.52020<- PM2.5_2020dailyave$avePM2.5
+pm2.54yearave<- avePM2.5$ave4years
+sd(pm2.52020)
+# 3.45
+sd(pm2.54yearave)
+# 2.16
+
+hist(pm2.52020, breaks=20,
+     col=rgb(0,0,1,0.2), 
+     xlim = c(0,30), ylim = c(0,100))
+
+hist(pm2.54yearave, breaks=20,
+     col=rgb(1,0,0,0.2), add=TRUE)
+
+# note that both histograms are not 
+# normally distributed
+t.test(pm2.52020, pm2.54yearave)
+
+# we have data:  pm2.52020 and pm2.54yearave
+# t = -3.8898, df = 613.71, p-value =
+#  0.0001113
+# alternative hypothesis: true difference in means is not equal to 0
+# 95 percent confidence interval:
+#  -1.2469091 -0.4102558
+# sample estimates:mean of x mean of y 
+# 6.505896  7.334479 
+
+
+## now lets try a box plot or violin plot
+library(ggplot2)
