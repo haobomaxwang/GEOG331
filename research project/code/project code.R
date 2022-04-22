@@ -93,6 +93,8 @@ legend("topright", c("2017","2018", "2019", "2020"), #legend items
        pch=c(NA,NA,NA,NA),#symbols
        bty="n")#no legend border
 
+abline(h=12, col="yellow")
+abline(h=35, col="red")
 ## Most studies indicate PM2.5 at or below 12 μg/m3 is 
 # considered healthy with little to no risk from 
 # exposure. If the level goes to or above 35 μg/m3 
@@ -106,3 +108,19 @@ legend("topright", c("2017","2018", "2019", "2020"), #legend items
 ## or, plot the average pm2.5 across multiple years 
 ## and then plot 2020 on top
 
+avePM2.5 <- merge(PM2.5_2017dailyave,
+                  PM2.5_2018dailyave,
+                  by = "doy")
+avePM2.5<- merge(avePM2.5,
+                 PM2.5_2019dailyave,
+                 by="doy")
+avePM2.5<- merge(avePM2.5,
+                 PM2.5_2021dailyave,
+                 by="doy")
+# now we have a dataframe that has 2017,
+# 2018, 2019, 2021 data
+colnames(avePM2.5)<- c("doy", "date2017",
+                       "ave2017", "date2018",
+                       "ave2018", "date2019",
+                       "ave2019", "date2021", 
+                       "ave2021")
