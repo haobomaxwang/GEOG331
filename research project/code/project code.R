@@ -171,12 +171,23 @@ sd(pm2.52020)
 sd(pm2.54yearave)
 # 2.16
 
+# plot a histogram 
+dev.new(width=8, height=8)
+par(mai=c(1,1,1,1))
+
 hist(pm2.52020, breaks=20,
      col=rgb(0,0,1,0.2), 
-     xlim = c(0,30), ylim = c(0,100))
+     xlim = c(0,30), ylim = c(0,100),
+     xlab= "PM2.5 µg/m³",
+     main = "2020 vs Four year average (2017-19, 2021)")
 
 hist(pm2.54yearave, breaks=20,
      col=rgb(1,0,0,0.2), add=TRUE)
+
+legend("topright", c("2020", "Four year average"), #legend items
+       col=c(rgb(0,0,1,0.2), rgb(1,0,0,0.2)), #colors
+       pch=c(15,15),#symbols
+       bty="n")#no legend border
 
 # note that both histograms are not 
 # normally distributed
@@ -191,6 +202,7 @@ t.test(pm2.52020, pm2.54yearave)
 # sample estimates:mean of x mean of y 
 # 6.505896  7.334479 
 
+help(shapiro.test)
 
 ## now lets try a box plot or violin plot
 library(ggplot2)
