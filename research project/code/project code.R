@@ -230,8 +230,21 @@ library(lubridate)
 colnames(Traffic_dailyave)<- c("Date", "Traffic_count")
 traffic_date<- as.Date(Traffic_dailyave$Date, "%m/%d/%Y")
 Traffic_dailyave$year<- year(traffic_date)
-
+Traffic_dailyave$doy<- yday(traffic_date)
 ## subset 2020
 Traffic2020<- Traffic_dailyave[Traffic_dailyave$year==2020, ]
 
 ## merge pm2.5 to traffic data
+merged2020<- merge(Traffic2020, PM2.5_2020dailyave,
+      by= "doy")
+
+# plot the graph
+plot(merged2020$Traffic_count, merged2020$avePM2.5,
+     xlab = "Traffic count", ylab = "PM2.5 µg/m³")
+
+# linear model
+LMtraffic_pm2.5<- lm(merged2020$avePM2.5~merged2020$Traffic_count)
+
+summary(LMtraffic_pm2.5)
+
+# significant but negatively correlated
