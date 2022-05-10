@@ -171,6 +171,14 @@ sd(pm2.52020)
 sd(pm2.54yearave)
 # 2.16
 
+# shapiro test 
+shapiro.test(pm2.52020)
+# p-value= 1.7e-15
+
+shapiro.test(pm2.54yearave)
+# p-value= 1.142e-10
+
+
 # plot a histogram 
 dev.new(width=8, height=8)
 par(mai=c(1,1,1,1))
@@ -202,7 +210,28 @@ t.test(pm2.52020, pm2.54yearave)
 # sample estimates:mean of x mean of y 
 # 6.505896  7.334479 
 
-help(shapiro.test)
 
-## now lets try a box plot or violin plot
-library(ggplot2)
+
+
+###
+# plotting traffic count data with PM2.5 pollution
+Traffic<- read.csv("Z:/students/hwang/github/GEOG331/research project/data/Traffic_Volume_Counts__2014-2020_NYC.csv")
+
+## sum the hourly count into 24 hour count for each site
+Traffic$sum<- rowSums(Traffic[, c(8:31)])
+
+## aggregate the average traffic sum by day.
+Traffic_dailyave<- aggregate(Traffic$sum,
+                             by= list(Traffic$Date),
+                             FUN= "mean",
+                             na.rm= TRUE
+)
+library(lubridate)
+colnames(Traffic_dailyave)<- c("Date", "Traffic_count")
+traffic_date<- as.Date(Traffic_dailyave$Date, "%m/%d/%Y")
+Traffic_dailyave$year<- year(traffic_date)
+
+## subset 2020
+Traffic2020<- Traffic_dailyave[Traffic_dailyave$year==2020, ]
+
+## merge pm2.5 to traffic data
