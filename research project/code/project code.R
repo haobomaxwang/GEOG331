@@ -165,6 +165,18 @@ abline(h=35, col="red")
 
 
 pm2.52020<- PM2.5_2020dailyave$avePM2.5
+
+#pm2.5 2017
+pm2.52017<- PM2.5_2017dailyave$avePM2.5
+sd(pm2.52017)
+# 3.33
+
+#pm2.5 2018 
+pm2.52018<- PM2.5_2018dailyave$avePM2.5
+sd(pm2.52018)
+# 3.86
+
+
 pm2.54yearave<- avePM2.5$ave4years
 sd(pm2.52020)
 # 3.45
@@ -174,6 +186,9 @@ sd(pm2.54yearave)
 # shapiro test 
 shapiro.test(pm2.52020)
 # p-value= 1.7e-15
+
+shapiro.test(pm2.52017)
+# p-value = 2.1e-10
 
 shapiro.test(pm2.54yearave)
 # p-value= 1.142e-10
@@ -210,7 +225,11 @@ t.test(pm2.52020, pm2.54yearave)
 # sample estimates:mean of x mean of y 
 # 6.505896  7.334479 
 
+t.test(pm2.52017, pm2.52020)
+# p value significant. Mean 7.34 vs 6.51
 
+t.test(pm2.52017, pm2.52018)
+# p value not significant 
 
 
 ###
